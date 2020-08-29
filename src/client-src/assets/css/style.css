@@ -1,4 +1,24 @@
 body {
-    margin: 0px;
-    overflow: hidden
+	margin: 0px;
+	overflow: hidden;
+}
+
+.app__header {
+	width: 100%;
+	height: 50px;
+	background-color: #2a2a68;
+	border-bottom: 3px solid #dd4d8f;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+}
+.app__header-icon {
+	width: 30px;
+	height: 30px;
+}
+.app__header-title {
+	color: #f6f2ee;
+	font-size: 28px;
+	font-weight: bold;
+	flex: 1;
 }
