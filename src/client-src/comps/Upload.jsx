@@ -22,8 +22,9 @@ export default class Upload extends React.Component {
 		return (
 			<div>
 				<h1>Upload</h1>
+				<button onClick={this.doSomething}> DO SOMETHING </button>
 				{this.state.data.map((item) => (
-					<h1>{item.name}</h1>
+					<h1 key={item.name}>{item.name}</h1>
 				))}
 			</div>
 		)

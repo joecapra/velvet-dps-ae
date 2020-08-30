@@ -59,7 +59,11 @@ export default class App extends React.Component {
 		this._controller = props.controller
 		// navigator data
 		this.data = [
-			{ title: "Home", icon: "home", comp: <Home onExecutePlugin={this.onExecutePlugin} /> },
+			{
+				title: "Home",
+				icon: "home",
+				comp: <Home onExecutePlugin={this.onExecutePlugin} onExecuteDoSomething={this.onExecuteDoSomething} />,
+			},
 			{ title: "JSON", icon: "cloud_upload", comp: <Upload /> },
 			{ title: "Config", icon: "settings", comp: <Config /> },
 			{ title: "Debug", icon: "bug_report", comp: <Debug rawLogz={this.controller.logz} /> },
@@ -88,6 +92,13 @@ export default class App extends React.Component {
 		console.log("App:: onExecutePlugin")
 		// here disable UI
 		this._controller.invokePlugin(options)
+		// here enable ui
+	}
+
+	onExecuteDoSomething = (options) => {
+		console.log("App:: onExecuteDoSomething")
+		// here disable UI
+		this._controller.doSomething()
 		// here enable ui
 	}
 

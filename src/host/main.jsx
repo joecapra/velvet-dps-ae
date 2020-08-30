@@ -14,8 +14,17 @@ governing permissions and limitations under the License.
 // alert(JSON.stringify(a))
 
 function test_host(obj_string) {
+	alert('test_host')
+	console.log("@@@@@@ test_host in main jsx called")
 	// alert(obj_string)
 	res = JSON.parse(obj_string)
 	// alert(res)
 	return 'hola from extendscript ' + res.name
+}
+
+function doSomething() {
+	alert('doSomething')
+	res = 'poop'
+	// alert(res)
+	return 'hola from extendscript ' + res
 }

@@ -6,89 +6,89 @@
  * load jsx scripts dynamically
  */
 class ScriptLoader {
-    EvalScript_ErrMessage = "EvalScript error."
+	EvalScript_ErrMessage = "EvalScript error."
 
-    constructor() {
-        this.cs = new CSInterface()
-    }
+	constructor() {
+		this.cs = new CSInterface()
+	}
 
-    get cs() {
-        return this._cs
-    }
+	get cs() {
+		return this._cs
+	}
 
-    set cs(val) {
-        this._cs = val
-    }
+	set cs(val) {
+		this._cs = val
+	}
 
-    /**
-     * loadJSX - load a jsx file dynamically, this
-     * will also load all of it's includes which is desirable
-     *
-     * @param  {type} fileName the file name
-     * @return {type}          description
-     */
-    loadJSX(fileName) {
-        var cs = this.cs
-        var extensionRoot = cs.getSystemPath(SystemPath.EXTENSION) + "/host/";
+	/**
+	 * loadJSX - load a jsx file dynamically, this
+	 * will also load all of it's includes which is desirable
+	 *
+	 * @param  {type} fileName the file name
+	 * @return {type}          description
+	 */
+	loadJSX(fileName) {
+		var cs = this.cs
+		var extensionRoot = cs.getSystemPath(SystemPath.EXTENSION) + "/host/"
+		console.log("loadJSX in ScriptLoader CALLED" + fileName + " END")
+		cs.evalScript('$.evalFile("' + extensionRoot + fileName + '")')
+	}
 
-        cs.evalScript('$.evalFile("' + extensionRoot + fileName + '")');
-    }
+	/**
+	 * evalScript - evaluate a JSX script
+	 *
+	 * @param  {type} functionName the string name of the function to invoke
+	 * @param  {type} params the params object
+	 * @return {Promise} a promise
+	 */
+	evalScript(functionName, params) {
+		var params_string = params ? JSON.stringify(params) : ""
+		var eval_string = `${functionName}('${params_string}')`
+		var that = this
+		that.log("FUNCTION NAME CALLED functionName= " + functionName + " END")
+		that.log("FUNCTION NAME CALLED params= " + params + " END")
+		that.log("FUNCTION NAME CALLED eval_string= " + eval_string + " END")
 
-    /**
-     * evalScript - evaluate a JSX script
-     *
-     * @param  {type} functionName the string name of the function to invoke
-     * @param  {type} params the params object
-     * @return {Promise} a promise
-     */
-    evalScript(functionName, params) {
-        var params_string = params ? JSON.stringify(params) : ''
-        var eval_string = `${functionName}('${params_string}')`
-        var that = this
+		return new Promise((resolve, reject) => {
+			var callback = function (eval_res) {
+				// console.log('weird' + eval_res)
+				if (typeof eval_res === "string") {
+					// console.log(eval_res)
+					if (eval_res.toLowerCase().indexOf("error") != -1) {
+						that.log("err eval")
+						reject(that.createScriptError(eval_res))
 
-        return new Promise((resolve, reject) => {
+						return
+					}
+				}
 
-            var callback = function(eval_res) {
-                // console.log('weird' + eval_res)
-                if(typeof eval_res === 'string') {
-                    // console.log(eval_res)
-                    if(eval_res.toLowerCase().indexOf('error') != -1) {
-                        that.log('err eval')
-                        reject(that.createScriptError(eval_res))
+				that.log("success eval")
 
-                        return
-                    }
-                }
+				resolve(eval_res)
 
-                that.log('success eval')
+				return
+			}
 
-                resolve(eval_res)
+			that.cs.evalScript(eval_string, callback)
+		})
+	}
 
-                return
-            }
+	createScriptError(reason, data) {
+		return { reason, data }
+	}
 
-            that.cs.evalScript(eval_string, callback)
-        })
+	/**
+	 * log some info with session prefix
+	 *
+	 * @param  {string} val what to log
+	 */
+	log(val) {
+		console.log(`${this.name} ${val}`)
+	}
 
-    }
-
-    createScriptError(reason, data) {
-        return {reason, data}
-    }
-
-    /**
-     * log some info with session prefix
-     *
-     * @param  {string} val what to log
-     */
-    log(val) {
-        console.log(`${this.name} ${val}`)
-    }
-
-    get name() {
-        return 'ScriptLoader:: '
-    }
-
+	get name() {
+		return "ScriptLoader:: "
+	}
 }
 
 var scriptLoader = new ScriptLoader()
